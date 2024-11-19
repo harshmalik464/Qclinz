@@ -32,22 +32,24 @@ function MainComponent() {
   const [showContactPopup, setShowContactPopup] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#000078] via-[#1a237e] to-[#2563eb] font-poppins overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-[#000078] via-[#1a237e] to-[#2563eb] font-poppins relative">
       <div className="absolute inset-0 bg-[url('/pattern.svg')] opacity-10"></div>
-      {bubbles.map((bubble) => (
-        <div
-          key={bubble.id}
-          className="absolute rounded-full bg-white/10"
-          style={{
-            width: bubble.size + "px",
-            height: bubble.size + "px",
-            left: bubble.left + "%",
-            bottom: "-20%",
-            animation: `float ${bubble.animationDuration}s infinite linear`,
-            animationDelay: `${bubble.delay}s`,
-          }}
-        />
-      ))}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {bubbles.map((bubble) => (
+          <div
+            key={bubble.id}
+            className="absolute rounded-full bg-white/10"
+            style={{
+              width: bubble.size + "px",
+              height: bubble.size + "px",
+              left: bubble.left + "%",
+              bottom: "-20%",
+              animation: `float ${bubble.animationDuration}s infinite linear`,
+              animationDelay: `${bubble.delay}s`,
+            }}
+          />
+        ))}
+      </div>
 
       <div className="relative">
         <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-white/10 to-transparent"></div>
@@ -234,7 +236,7 @@ function MainComponent() {
                   <i className="fab fa-twitter text-xl"></i>
                 </a>
                 <a
-                  href="https://www.instagram.com/qclinz?igsh=bzJvNm9tMjFhMDY5"
+                  href="https://instagram.com/qclinz"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-white/70 hover:text-white transition-colors"
@@ -250,252 +252,262 @@ function MainComponent() {
         </footer>
       </div>
 
-      {showPartnerPopup && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl p-6 w-full max-w-md">
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-2xl font-semibold text-[#000078]">
-                Partner with Us
-              </h3>
-              <button
-                onClick={() => setShowPartnerPopup(false)}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                <i className="fas fa-times text-xl"></i>
-              </button>
-            </div>
-            <form onSubmit={handlePartnerSubmit} className="space-y-4">
-              <div>
-                <input
-                  type="text"
-                  name="businessName"
-                  value={businessName}
-                  onChange={(e) => setBusinessName(e.target.value)}
-                  placeholder="Business Name"
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#000078]"
-                  required
-                />
-              </div>
-              <div>
-                <input
-                  type="email"
-                  name="partnerEmail"
-                  value={partnerEmail}
-                  onChange={(e) => setPartnerEmail(e.target.value)}
-                  placeholder="Business Email"
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#000078]"
-                  required
-                />
-              </div>
-              <button
-                type="submit"
-                className="w-full py-3 rounded-lg bg-[#000078] text-white font-semibold hover:bg-[#8aa4ca] transition-all"
-              >
-                Submit Application
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {showAboutPopup && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto relative">
-            <div className="sticky top-0 right-0 bg-white pb-4 z-10">
-              <div className="flex justify-between items-center">
-                <h3 className="text-3xl font-semibold text-[#000078] sticky top-0">
-                  About Us
+      <div className="fixed inset-0 pointer-events-none">
+        {showPartnerPopup && (
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 pointer-events-auto">
+            <div className="bg-white rounded-2xl p-6 w-full max-w-md">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-2xl font-semibold text-[#000078]">
+                  Partner with Us
                 </h3>
                 <button
-                  onClick={() => setShowAboutPopup(false)}
-                  className="text-gray-500 hover:text-gray-700 p-2"
+                  onClick={() => setShowPartnerPopup(false)}
+                  className="text-gray-500 hover:text-gray-700"
                 >
                   <i className="fas fa-times text-xl"></i>
                 </button>
               </div>
-            </div>
-            <div className="space-y-6">
-              <p className="text-gray-700 leading-relaxed">
-                At Qclinz, we're revolutionizing the way you handle your laundry
-                needs. Our mission is to simplify your daily life by providing
-                convenient, high-quality laundry services right at your
-                doorstep.
-              </p>
-              <p className="text-gray-700 leading-relaxed">
-                Through our carefully curated network of trusted local laundry
-                partners, we ensure that your garments receive the best possible
-                care. From everyday washing to specialized dry cleaning and
-                precise ironing, our services are designed to meet all your
-                fabric care needs.
-              </p>
-              <p className="text-gray-700 leading-relaxed">
-                What sets us apart is our commitment to:
-              </p>
-              <ul className="list-disc pl-6 space-y-2 text-gray-700">
-                <li>Premium quality service with attention to detail</li>
-                <li>
-                  Convenient pickup and delivery at your preferred schedule
-                </li>
-                <li>Transparent pricing and reliable service</li>
-                <li>Eco-friendly cleaning options</li>
-                <li>Professional handling of all garment types</li>
-              </ul>
-              <p className="text-gray-700 leading-relaxed">
-                Join thousands of satisfied customers who have discovered the
-                joy of hassle-free laundry care with Qclinz. Let us handle the
-                chores while you focus on what matters most to you.
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {showPrivacyPopup && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-2xl font-semibold text-[#000078]">
-                Privacy Policy
-              </h3>
-              <button
-                onClick={() => setShowPrivacyPopup(false)}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                <i className="fas fa-times text-xl"></i>
-              </button>
-            </div>
-            <div className="space-y-4 text-gray-700">
-              <p>Last updated: January 1, 2024</p>
-              <p>
-                At Qclinz, we take your privacy seriously. This Privacy Policy
-                explains how we collect, use, and protect your personal
-                information.
-              </p>
-              <h4 className="text-lg font-semibold mt-4">
-                Information We Collect
-              </h4>
-              <ul className="list-disc pl-6 space-y-2">
-                <li>Contact information (name, email, phone number)</li>
-                <li>Delivery addresses</li>
-                <li>Order history and preferences</li>
-                <li>Payment information</li>
-              </ul>
-              <h4 className="text-lg font-semibold mt-4">
-                How We Use Your Information
-              </h4>
-              <ul className="list-disc pl-6 space-y-2">
-                <li>To provide and improve our services</li>
-                <li>To process your orders and payments</li>
-                <li>To communicate with you about your orders</li>
-                <li>
-                  To send you marketing communications (with your consent)
-                </li>
-              </ul>
-              <h4 className="text-lg font-semibold mt-4">Data Security</h4>
-              <p>
-                We implement appropriate security measures to protect your
-                personal information.
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {showTermsPopup && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-2xl font-semibold text-[#000078]">
-                Terms of Service
-              </h3>
-              <button
-                onClick={() => setShowTermsPopup(false)}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                <i className="fas fa-times text-xl"></i>
-              </button>
-            </div>
-            <div className="space-y-4 text-gray-700">
-              <p>Last updated: January 1, 2024</p>
-              <h4 className="text-lg font-semibold mt-4">
-                1. Service Agreement
-              </h4>
-              <p>
-                By using Qclinz services, you agree to these terms and
-                conditions.
-              </p>
-              <h4 className="text-lg font-semibold mt-4">
-                2. Service Description
-              </h4>
-              <p>
-                Qclinz provides laundry pickup, cleaning, and delivery services
-                through our partner network.
-              </p>
-              <h4 className="text-lg font-semibold mt-4">
-                3. Pricing and Payment
-              </h4>
-              <p>
-                Prices are as listed in our app. Payment is required before
-                service completion.
-              </p>
-              <h4 className="text-lg font-semibold mt-4">
-                4. Service Guarantee
-              </h4>
-              <p>
-                We strive to provide high-quality service and will address any
-                issues promptly.
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {showContactPopup && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl p-8 w-full max-w-md">
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-2xl font-semibold text-[#000078]">
-                Contact Us
-              </h3>
-              <button
-                onClick={() => setShowContactPopup(false)}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                <i className="fas fa-times text-xl"></i>
-              </button>
-            </div>
-            <div className="space-y-6">
-              <div className="space-y-4">
-                <div className="flex items-center space-x-3">
-                  <i className="fas fa-envelope text-[#000078]"></i>
-                  <p>hello@qclinz.com</p>
+              <form onSubmit={handlePartnerSubmit} className="space-y-4">
+                <div>
+                  <input
+                    type="text"
+                    name="businessName"
+                    value={businessName}
+                    onChange={(e) => setBusinessName(e.target.value)}
+                    placeholder="Business Name"
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#000078]"
+                    required
+                  />
                 </div>
-                <div className="flex items-center space-x-3">
-                  <i className="fas fa-phone text-[#000078]"></i>
-                  <p>+1 (555) 123-4567</p>
+                <div>
+                  <input
+                    type="email"
+                    name="partnerEmail"
+                    value={partnerEmail}
+                    onChange={(e) => setPartnerEmail(e.target.value)}
+                    placeholder="Business Email"
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#000078]"
+                    required
+                  />
                 </div>
-                <div className="flex items-center space-x-3">
-                  <i className="fas fa-map-marker-alt text-[#000078]"></i>
-                  <p>123 Laundry Street, Clean City, ST 12345</p>
+                <button
+                  type="submit"
+                  className="w-full py-3 rounded-lg bg-[#000078] text-white font-semibold hover:bg-[#8aa4ca] transition-all"
+                >
+                  Submit Application
+                </button>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {showAboutPopup && (
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 pointer-events-auto">
+            <div className="bg-white rounded-2xl p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto relative">
+              <div className="sticky top-0 right-0 bg-white pb-4 z-10">
+                <div className="flex justify-between items-center">
+                  <h3 className="text-3xl font-semibold text-[#000078] sticky top-0">
+                    About Us
+                  </h3>
+                  <button
+                    onClick={() => setShowAboutPopup(false)}
+                    className="text-gray-500 hover:text-gray-700 p-2"
+                  >
+                    <i className="fas fa-times text-xl"></i>
+                  </button>
                 </div>
               </div>
-              <div className="border-t pt-6">
-                <p className="text-sm text-gray-600">Business Hours:</p>
-                <p className="text-sm">Monday - Friday: 8:00 AM - 8:00 PM</p>
-                <p className="text-sm">Saturday - Sunday: 9:00 AM - 6:00 PM</p>
+              <div className="space-y-6">
+                <p className="text-gray-700 leading-relaxed">
+                  At Qclinz, we're revolutionizing the way you handle your
+                  laundry needs. Our mission is to simplify your daily life by
+                  providing convenient, high-quality laundry services right at
+                  your doorstep.
+                </p>
+                <p className="text-gray-700 leading-relaxed">
+                  Through our carefully curated network of trusted local laundry
+                  partners, we ensure that your garments receive the best
+                  possible care. From everyday washing to specialized dry
+                  cleaning and precise ironing, our services are designed to
+                  meet all your fabric care needs.
+                </p>
+                <p className="text-gray-700 leading-relaxed">
+                  What sets us apart is our commitment to:
+                </p>
+                <ul className="list-disc pl-6 space-y-2 text-gray-700">
+                  <li>Premium quality service with attention to detail</li>
+                  <li>
+                    Convenient pickup and delivery at your preferred schedule
+                  </li>
+                  <li>Transparent pricing and reliable service</li>
+                  <li>Eco-friendly cleaning options</li>
+                  <li>Professional handling of all garment types</li>
+                </ul>
+                <p className="text-gray-700 leading-relaxed">
+                  Join thousands of satisfied customers who have discovered the
+                  joy of hassle-free laundry care with Qclinz. Let us handle the
+                  chores while you focus on what matters most to you.
+                </p>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+
+        {showPrivacyPopup && (
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 pointer-events-auto">
+            <div className="bg-white rounded-2xl p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-2xl font-semibold text-[#000078]">
+                  Privacy Policy
+                </h3>
+                <button
+                  onClick={() => setShowPrivacyPopup(false)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <i className="fas fa-times text-xl"></i>
+                </button>
+              </div>
+              <div className="space-y-4 text-gray-700">
+                <p>Last updated: January 1, 2024</p>
+                <p>
+                  At Qclinz, we take your privacy seriously. This Privacy Policy
+                  explains how we collect, use, and protect your personal
+                  information.
+                </p>
+                <h4 className="text-lg font-semibold mt-4">
+                  Information We Collect
+                </h4>
+                <ul className="list-disc pl-6 space-y-2">
+                  <li>Contact information (name, email, phone number)</li>
+                  <li>Delivery addresses</li>
+                  <li>Order history and preferences</li>
+                  <li>Payment information</li>
+                </ul>
+                <h4 className="text-lg font-semibold mt-4">
+                  How We Use Your Information
+                </h4>
+                <ul className="list-disc pl-6 space-y-2">
+                  <li>To provide and improve our services</li>
+                  <li>To process your orders and payments</li>
+                  <li>To communicate with you about your orders</li>
+                  <li>
+                    To send you marketing communications (with your consent)
+                  </li>
+                </ul>
+                <h4 className="text-lg font-semibold mt-4">Data Security</h4>
+                <p>
+                  We implement appropriate security measures to protect your
+                  personal information.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {showTermsPopup && (
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 pointer-events-auto">
+            <div className="bg-white rounded-2xl p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-2xl font-semibold text-[#000078]">
+                  Terms of Service
+                </h3>
+                <button
+                  onClick={() => setShowTermsPopup(false)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <i className="fas fa-times text-xl"></i>
+                </button>
+              </div>
+              <div className="space-y-4 text-gray-700">
+                <p>Last updated: January 1, 2024</p>
+                <h4 className="text-lg font-semibold mt-4">
+                  1. Service Agreement
+                </h4>
+                <p>
+                  By using Qclinz services, you agree to these terms and
+                  conditions.
+                </p>
+                <h4 className="text-lg font-semibold mt-4">
+                  2. Service Description
+                </h4>
+                <p>
+                  Qclinz provides laundry pickup, cleaning, and delivery
+                  services through our partner network.
+                </p>
+                <h4 className="text-lg font-semibold mt-4">
+                  3. Pricing and Payment
+                </h4>
+                <p>
+                  Prices are as listed in our app. Payment is required before
+                  service completion.
+                </p>
+                <h4 className="text-lg font-semibold mt-4">
+                  4. Service Guarantee
+                </h4>
+                <p>
+                  We strive to provide high-quality service and will address any
+                  issues promptly.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {showContactPopup && (
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 pointer-events-auto">
+            <div className="bg-white rounded-2xl p-8 w-full max-w-md">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-2xl font-semibold text-[#000078]">
+                  Contact Us
+                </h3>
+                <button
+                  onClick={() => setShowContactPopup(false)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <i className="fas fa-times text-xl"></i>
+                </button>
+              </div>
+              <div className="space-y-6">
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-3">
+                    <i className="fas fa-envelope text-[#000078]"></i>
+                    <p>hello@qclinz.com</p>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <i className="fas fa-phone text-[#000078]"></i>
+                    <p>+1 (555) 123-4567</p>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <i className="fas fa-map-marker-alt text-[#000078]"></i>
+                    <p>123 Laundry Street, Clean City, ST 12345</p>
+                  </div>
+                </div>
+                <div className="border-t pt-6">
+                  <p className="text-sm text-gray-600">Business Hours:</p>
+                  <p className="text-sm">Monday - Friday: 8:00 AM - 8:00 PM</p>
+                  <p className="text-sm">
+                    Saturday - Sunday: 9:00 AM - 6:00 PM
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
 
       <style jsx global>{`
         @keyframes float {
           0% {
-            transform: translateY(0);
+            transform: translateY(0) scale(1);
+            opacity: 1;
+          }
+          95% {
+            transform: translateY(-120vh) scale(1);
+            opacity: 1;
           }
           100% {
-            transform: translateY(-120vh);
+            transform: translateY(-120vh) scale(0);
+            opacity: 0;
           }
         }
       `}</style>
