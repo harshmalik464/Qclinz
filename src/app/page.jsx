@@ -1,6 +1,5 @@
 "use client";
-import React, { useState } from 'react';
-import '@fortawesome/fontawesome-free/css/all.min.css';
+import React from "react";
 
 function MainComponent() {
   const [email, setEmail] = useState("");
@@ -18,38 +17,19 @@ function MainComponent() {
     setBusinessName("");
     setShowPartnerPopup(false);
   };
-  const [bubbles] = useState(
-    Array.from({ length: 20 }, (_, i) => ({
-      id: i,
-      size: Math.random() * 100 + 50,
-      left: Math.random() * 100,
-      animationDuration: Math.random() * 10 + 10,
-      delay: Math.random() * 5,
-    }))
-  );
   const [showPrivacyPopup, setShowPrivacyPopup] = useState(false);
   const [showTermsPopup, setShowTermsPopup] = useState(false);
   const [showContactPopup, setShowContactPopup] = useState(false);
+  const scrollToSection = (id) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#000078] via-[#1a237e] to-[#2563eb] font-poppins relative">
+    <div className="min-h-screen bg-gradient-to-br from-[#000078] via-[#1a237e] to-[#2563eb] font-poppins relative scroll-smooth">
       <div className="absolute inset-0 bg-[url('/pattern.svg')] opacity-10"></div>
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {bubbles.map((bubble) => (
-          <div
-            key={bubble.id}
-            className="absolute rounded-full bg-white/10"
-            style={{
-              width: bubble.size + "px",
-              height: bubble.size + "px",
-              left: bubble.left + "%",
-              bottom: "-20%",
-              animation: `float ${bubble.animationDuration}s infinite linear`,
-              animationDelay: `${bubble.delay}s`,
-            }}
-          />
-        ))}
-      </div>
 
       <div className="relative">
         <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-white/10 to-transparent"></div>
@@ -88,7 +68,7 @@ function MainComponent() {
             </div>
           </header>
 
-          <div className="max-w-6xl mx-auto">
+          <div id="services" className="max-w-6xl mx-auto">
             <div className="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12">
               <div className="flex-1 space-y-6 lg:space-y-10 w-full">
                 <div className="space-y-4 sm:space-y-6">
@@ -494,23 +474,6 @@ function MainComponent() {
           </div>
         )}
       </div>
-
-      <style jsx global>{`
-        @keyframes float {
-          0% {
-            transform: translateY(0) scale(1);
-            opacity: 1;
-          }
-          95% {
-            transform: translateY(-120vh) scale(1);
-            opacity: 1;
-          }
-          100% {
-            transform: translateY(-120vh) scale(0);
-            opacity: 0;
-          }
-        }
-      `}</style>
     </div>
   );
 }
