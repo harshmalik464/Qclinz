@@ -1,6 +1,7 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useEffect,useState } from 'react';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import './globals.css';
 
 function MainComponent() {
   const [email, setEmail] = useState("");
@@ -21,16 +22,55 @@ function MainComponent() {
   const [showPrivacyPopup, setShowPrivacyPopup] = useState(false);
   const [showTermsPopup, setShowTermsPopup] = useState(false);
   const [showContactPopup, setShowContactPopup] = useState(false);
-  const scrollToSection = (id) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
     }
-  };
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isModalOpen]);
+
+  useEffect(() => {
+    setIsModalOpen(
+      showPartnerPopup ||
+        showAboutPopup ||
+        showPrivacyPopup ||
+        showTermsPopup ||
+        showContactPopup
+    );
+  }, [
+    showPartnerPopup,
+    showAboutPopup,
+    showPrivacyPopup,
+    showTermsPopup,
+    showContactPopup,
+  ]);
+
+  useEffect(() => {
+    const preventBouncyScroll = (e) => {
+        if (e.target === document.body) {
+            e.preventDefault();
+        }
+    };
+
+    // Prevent default touch move behavior
+    document.addEventListener('touchmove', preventBouncyScroll, { passive: false });
+
+    return () => {
+        document.removeEventListener('touchmove', preventBouncyScroll);
+    };
+}, []);
+
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#000078] via-[#1a237e] to-[#2563eb] font-poppins relative scroll-smooth">
-      <div className="absolute inset-0 bg-[url('/pattern.svg')] opacity-10"></div>
+    <div className="min-h-screen bg-gradient-to-br from-[#000078] via-[#1a237e] to-[#2563eb] font-poppins relative">
+      <div className="scrollable">
+      <div className="fixed inset-0 bg-[url('/pattern.svg')] opacity-10"></div>
 
       <div className="relative">
         <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-white/10 to-transparent"></div>
@@ -236,7 +276,7 @@ function MainComponent() {
       <div className="fixed inset-0 pointer-events-none">
         {showPartnerPopup && (
           <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 pointer-events-auto">
-            <div className="bg-white rounded-2xl p-6 w-full max-w-md">
+            <div className="bg-white rounded-2xl p-6 w-full max-w-md overflow-y-auto max-h-[90vh]">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-2xl font-semibold text-[#000078]">
                   Partner with Us
@@ -284,7 +324,7 @@ function MainComponent() {
 
         {showAboutPopup && (
           <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 pointer-events-auto">
-            <div className="bg-white rounded-2xl p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto relative">
+            <div className="bg-white rounded-2xl p-8 w-full max-w-2xl overflow-y-auto max-h-[90vh]">
               <div className="sticky top-0 right-0 bg-white pb-4 z-10">
                 <div className="flex justify-between items-center">
                   <h3 className="text-3xl font-semibold text-[#000078] sticky top-0">
@@ -336,7 +376,7 @@ function MainComponent() {
 
         {showPrivacyPopup && (
           <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 pointer-events-auto">
-            <div className="bg-white rounded-2xl p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="bg-white rounded-2xl p-8 w-full max-w-2xl overflow-y-auto max-h-[90vh]">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-2xl font-semibold text-[#000078]">
                   Privacy Policy
@@ -387,7 +427,7 @@ function MainComponent() {
 
         {showTermsPopup && (
           <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 pointer-events-auto">
-            <div className="bg-white rounded-2xl p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="bg-white rounded-2xl p-8 w-full max-w-2xl overflow-y-auto max-h-[90vh]">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-2xl font-semibold text-[#000078]">
                   Terms of Service
@@ -436,7 +476,7 @@ function MainComponent() {
 
         {showContactPopup && (
           <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 pointer-events-auto">
-            <div className="bg-white rounded-2xl p-8 w-full max-w-md">
+            <div className="bg-white rounded-2xl p-8 w-full max-w-md overflow-y-auto max-h-[90vh]">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-2xl font-semibold text-[#000078]">
                   Contact Us
@@ -474,6 +514,7 @@ function MainComponent() {
             </div>
           </div>
         )}
+      </div>
       </div>
     </div>
   );
