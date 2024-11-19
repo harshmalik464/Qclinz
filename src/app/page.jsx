@@ -1,5 +1,6 @@
 "use client";
-import React from "react";
+import React, { useState } from 'react';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 function MainComponent() {
   const [email, setEmail] = useState("");
