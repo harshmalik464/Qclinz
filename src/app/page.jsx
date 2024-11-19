@@ -151,11 +151,7 @@ function MainComponent() {
                   </p>
                 </form>
 
-                <div className="space-y-4">
-                  <p className="text-sm text-white/80">
-                    Questions? Contact us at hello@qclinz.com
-                  </p>
-                </div>
+                
               </div>
 
               <div className="flex-1 space-y-8">
@@ -209,7 +205,7 @@ function MainComponent() {
                   </p>
                 </div>
                 <p className="text-white/75">
-                  Questions? Contact us at hello@qclinz.com
+                  Questions? Contact us at info@qclinz.com
                 </p>
               </div>
             </div>
@@ -492,22 +488,22 @@ function MainComponent() {
                 <div className="space-y-4">
                   <div className="flex items-center space-x-3">
                     <i className="fas fa-envelope text-[#000078]"></i>
-                    <p>hello@qclinz.com</p>
+                    <p>info@qclinz.com</p>
                   </div>
                   <div className="flex items-center space-x-3">
                     <i className="fas fa-phone text-[#000078]"></i>
-                    <p>+1 (555) 123-4567</p>
+                    <p>coming soon</p>
                   </div>
                   <div className="flex items-center space-x-3">
                     <i className="fas fa-map-marker-alt text-[#000078]"></i>
-                    <p>123 Laundry Street, Clean City, ST 12345</p>
+                    <p>coming soon</p>
                   </div>
                 </div>
                 <div className="border-t pt-6">
                   <p className="text-sm text-gray-600">Business Hours:</p>
-                  <p className="text-sm">Monday - Friday: 8:00 AM - 8:00 PM</p>
+                  <p className="text-sm">coming soon</p>
                   <p className="text-sm">
-                    Saturday - Sunday: 9:00 AM - 6:00 PM
+                    coming soon 
                   </p>
                 </div>
               </div>
