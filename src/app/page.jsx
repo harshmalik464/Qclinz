@@ -2,6 +2,11 @@
 import React, { useEffect,useState } from 'react';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import './globals.css';
+import axios from 'axios'; // Import axios
+
+
+
+const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbz11FNu4vphfzd1ZQHBF7OuAXaBbbbbySXB-LKi4s02BZooydWyBFKLDotiFWHJf0aD/exec';
 
 function MainComponent() {
   const [email, setEmail] = useState("");
@@ -9,16 +14,61 @@ function MainComponent() {
   const [showAboutPopup, setShowAboutPopup] = useState(false);
   const [partnerEmail, setPartnerEmail] = useState("");
   const [businessName, setBusinessName] = useState("");
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setEmail("");
+    
+    try {
+      await axios.post(GOOGLE_SHEET_URL, {
+        type: 'waitlist',
+        email: email,
+      });
+      setEmail(""); // Clear the input
+      alert('You have joined the waitlist successfully!');
+    } catch (error) {
+      console.error('Error joining waitlist:', error);
+      alert('There was an error. Please try again later.');
+    }
   };
-  const handlePartnerSubmit = (e) => {
+
+
+  const handlePartnerSubmit = async (e) => {
     e.preventDefault();
-    setPartnerEmail("");
-    setBusinessName("");
-    setShowPartnerPopup(false);
+    console.log("Submitting partner form:", {
+      businessName,
+      partnerEmail,
+    });
+  
+    try {
+      const response = await fetch('/api/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          type: 'partner',
+          businessName: businessName,
+          partnerEmail: partnerEmail,
+        }),
+      });
+  
+      const result = await response.json();
+      if (response.ok) {
+        console.log("Response from server:", result);
+        setPartnerEmail("");
+        setBusinessName("");
+        setShowPartnerPopup(false);
+        alert('Your application has been submitted successfully!');
+      } else {
+        alert(`Error: ${result.message}`);
+      }
+    } catch (error) {
+      console.error('Error submitting partner application:', error);
+      alert('There was an error. Please try again later.');
+    }
   };
+
+
   const [showPrivacyPopup, setShowPrivacyPopup] = useState(false);
   const [showTermsPopup, setShowTermsPopup] = useState(false);
   const [showContactPopup, setShowContactPopup] = useState(false);
@@ -284,36 +334,36 @@ function MainComponent() {
                   <i className="fas fa-times text-xl"></i>
                 </button>
               </div>
-              <form onSubmit={handlePartnerSubmit} className="space-y-4">
-                <div>
-                  <input
-                    type="text"
-                    name="businessName"
-                    value={businessName}
-                    onChange={(e) => setBusinessName(e.target.value)}
-                    placeholder="Business Name"
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#000078]"
-                    required
-                  />
-                </div>
-                <div>
-                  <input
-                    type="email"
-                    name="partnerEmail"
-                    value={partnerEmail}
-                    onChange={(e) => setPartnerEmail(e.target.value)}
-                    placeholder="Business Email"
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#000078]"
-                    required
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="w-full py-3 rounded-lg bg-[#000078] text-white font-semibold hover:bg-[#8aa4ca] transition-all"
-                >
-                  Submit Application
-                </button>
-              </form>
+              <form onSubmit={handlePartnerSubmit} className="space-y-4"> 
+  <div>
+    <input
+      type="text"
+      name="businessName"
+      value={businessName}
+      onChange={(e) => setBusinessName(e.target.value)}
+      placeholder="Business Name"
+      className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#000078]"
+      required
+    />
+  </div>
+  <div>
+    <input
+      type="email"
+      name="partnerEmail"
+      value={partnerEmail}
+      onChange={(e) => setPartnerEmail(e.target.value)}
+      placeholder="Business Email"
+      className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#000078]"
+      required
+    />
+  </div>
+  <button
+    type="submit"
+    className="w-full py-3 rounded-lg bg-[#000078] text-white font-semibold hover:bg-[#8aa4ca] transition-all"
+  >
+    Submit Application
+  </button>
+</form>
             </div>
           </div>
         )}
