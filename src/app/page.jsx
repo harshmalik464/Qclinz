@@ -10,6 +10,15 @@ function MainComponent() {
   const [showContactPopup, setShowContactPopup] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [bubbles] = useState(() =>
+    Array.from({ length: 20 }, (_, i) => ({
+      id: i,
+      size: Math.random() * 100 + 50,
+      duration: Math.random() * 15 + 10,
+      delay: Math.random() * 10,
+      position: Math.random() * 100,
+    }))
+  );
 
   useEffect(() => {
     setIsVisible(true);
@@ -33,8 +42,21 @@ function MainComponent() {
   }, [showAboutPopup, showPrivacyPopup, showTermsPopup, showContactPopup]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#000078] via-[#1a237e] to-[#2563eb] font-poppins relative">
+    <div className="min-h-screen bg-gradient-to-br from-[#000078] via-[#1a237e] to-[#2563eb] font-poppins relative overflow-hidden">
       <div className="fixed inset-0 bg-[url('/pattern.svg')] opacity-10"></div>
+      {bubbles.map((bubble) => (
+        <div
+          key={bubble.id}
+          className="bubble fixed rounded-full bg-white/20"
+          style={{
+            width: bubble.size + "px",
+            height: bubble.size + "px",
+            left: bubble.position + "%",
+            animation: `float ${bubble.duration}s ${bubble.delay}s infinite`,
+            opacity: 0.2,
+          }}
+        />
+      ))}
 
       <div className="relative">
         <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-white/10 to-transparent"></div>
@@ -450,6 +472,22 @@ function MainComponent() {
         @keyframes slideIn {
           from { transform: translateY(-20px); opacity: 0; }
           to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes float {
+          0% {
+            transform: translateY(100vh) scale(0);
+            opacity: 0.2;
+          }
+          50% {
+            opacity: 0.4;
+          }
+          100% {
+            transform: translateY(-100%) scale(1);
+            opacity: 0.1;
+          }
+        }
+        .bubble {
+          pointer-events: none;
         }
       `}</style>
     </div>
