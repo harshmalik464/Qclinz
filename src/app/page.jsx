@@ -2,77 +2,18 @@
 import React, { useEffect,useState } from 'react';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import './globals.css';
-import axios from 'axios'; // Import axios
-
-
-
-const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbz11FNu4vphfzd1ZQHBF7OuAXaBbbbbySXB-LKi4s02BZooydWyBFKLDotiFWHJf0aD/exec';
 
 function MainComponent() {
-  const [email, setEmail] = useState("");
-  const [showPartnerPopup, setShowPartnerPopup] = useState(false);
   const [showAboutPopup, setShowAboutPopup] = useState(false);
-  const [partnerEmail, setPartnerEmail] = useState("");
-  const [businessName, setBusinessName] = useState("");
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    try {
-      await axios.post(GOOGLE_SHEET_URL, {
-        type: 'waitlist',
-        email: email,
-      });
-      setEmail(""); // Clear the input
-      alert('You have joined the waitlist successfully!');
-    } catch (error) {
-      console.error('Error joining waitlist:', error);
-      alert('There was an error. Please try again later.');
-    }
-  };
-
-
-  const handlePartnerSubmit = async (e) => {
-    e.preventDefault();
-    console.log("Submitting partner form:", {
-      businessName,
-      partnerEmail,
-    });
-  
-    try {
-      const response = await fetch('/api/submit', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          type: 'partner',
-          businessName: businessName,
-          partnerEmail: partnerEmail,
-        }),
-      });
-  
-      const result = await response.json();
-      if (response.ok) {
-        console.log("Response from server:", result);
-        setPartnerEmail("");
-        setBusinessName("");
-        setShowPartnerPopup(false);
-        alert('Your application has been submitted successfully!');
-      } else {
-        alert(`Error: ${result.message}`);
-      }
-    } catch (error) {
-      console.error('Error submitting partner application:', error);
-      alert('There was an error. Please try again later.');
-    }
-  };
-
-
   const [showPrivacyPopup, setShowPrivacyPopup] = useState(false);
   const [showTermsPopup, setShowTermsPopup] = useState(false);
   const [showContactPopup, setShowContactPopup] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
 
   useEffect(() => {
     if (isModalOpen) {
@@ -87,46 +28,26 @@ function MainComponent() {
 
   useEffect(() => {
     setIsModalOpen(
-      showPartnerPopup ||
-        showAboutPopup ||
-        showPrivacyPopup ||
-        showTermsPopup ||
-        showContactPopup
+      showAboutPopup || showPrivacyPopup || showTermsPopup || showContactPopup
     );
-  }, [
-    showPartnerPopup,
-    showAboutPopup,
-    showPrivacyPopup,
-    showTermsPopup,
-    showContactPopup,
-  ]);
-
-  useEffect(() => {
-    const preventBouncyScroll = (e) => {
-        if (e.target === document.body) {
-            e.preventDefault();
-        }
-    };
-
-    // Prevent default touch move behavior
-    document.addEventListener('touchmove', preventBouncyScroll, { passive: false });
-
-    return () => {
-        document.removeEventListener('touchmove', preventBouncyScroll);
-    };
-}, []);
-
+  }, [showAboutPopup, showPrivacyPopup, showTermsPopup, showContactPopup]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#000078] via-[#1a237e] to-[#2563eb] font-poppins relative">
-      <div className="scrollable">
       <div className="fixed inset-0 bg-[url('/pattern.svg')] opacity-10"></div>
 
       <div className="relative">
         <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-white/10 to-transparent"></div>
 
         <div className="container mx-auto px-4 pt-4 sm:pt-8 pb-8 sm:pb-12">
-          <header className="flex flex-col items-center mb-12 sm:mb-20 gap-4 sm:gap-6">
+          <header
+            className="flex flex-col items-center mb-12 sm:mb-20 gap-4 sm:gap-6"
+            style={{
+              opacity: isVisible ? 1 : 0,
+              transform: isVisible ? "translateY(0)" : "translateY(-20px)",
+              transition: "all 0.6s ease-out",
+            }}
+          >
             <div className="flex flex-col items-center">
               <img
                 src="https://ucarecdn.com/213796d5-14bc-4465-899d-d595347f9aa3/-/format/auto/"
@@ -137,20 +58,12 @@ function MainComponent() {
                 WE CARE, YOU ENJOY
               </p>
             </div>
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-6">
-              <button
-                onClick={() => setShowAboutPopup(true)}
-                className="px-4 sm:px-6 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 transition-all"
-              >
-                About Us
-              </button>
-              <button
-                onClick={() => setShowPartnerPopup(true)}
-                className="px-4 sm:px-6 py-2 rounded-full bg-white text-[#000078] hover:bg-[#8aa4ca] hover:text-white transition-all"
-              >
-                Partner with Us
-              </button>
-            </div>
+            <button
+              onClick={() => setShowAboutPopup(true)}
+              className="px-6 py-3 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 transition-all"
+            >
+              About Us
+            </button>
             <div className="relative">
               <p className="text-4xl sm:text-7xl font-bold text-white/90 mt-8 mb-8 bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent animate-pulse">
                 We are coming soon
@@ -160,7 +73,14 @@ function MainComponent() {
           </header>
 
           <div id="services" className="max-w-6xl mx-auto">
-            <div className="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12">
+            <div
+              className="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12"
+              style={{
+                opacity: isVisible ? 1 : 0,
+                transform: isVisible ? "translateX(0)" : "translateX(-20px)",
+                transition: "all 0.6s ease-out 0.3s",
+              }}
+            >
               <div className="flex-1 space-y-6 lg:space-y-10 w-full">
                 <div className="space-y-4 sm:space-y-6">
                   <h2 className="text-4xl sm:text-7xl md:text-8xl font-bold leading-tight bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
@@ -174,34 +94,6 @@ function MainComponent() {
                     washing, dry cleaning, and ironing, all at your fingertips.
                   </p>
                 </div>
-
-                <form
-                  onSubmit={handleSubmit}
-                  className="space-y-4 lg:space-y-6 w-full"
-                >
-                  <div className="flex flex-col sm:flex-row gap-4 max-w-md">
-                    <input
-                      type="email"
-                      name="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="Enter your email for early access"
-                      className="w-full px-6 py-4 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-white/50"
-                      required
-                    />
-                    <button
-                      type="submit"
-                      className="w-full sm:w-auto px-8 py-4 rounded-full bg-white text-[#000078] font-semibold hover:bg-[#8aa4ca] hover:text-white transition-all"
-                    >
-                      Join Waitlist
-                    </button>
-                  </div>
-                  <p className="text-sm text-white/60">
-                    Join 2,000+ others waiting for the launch
-                  </p>
-                </form>
-
-                
               </div>
 
               <div className="flex-1 space-y-8">
@@ -220,7 +112,14 @@ function MainComponent() {
             </div>
 
             <div className="mt-12 lg:mt-32 flex flex-col items-center gap-6 lg:gap-8">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-8 w-full max-w-4xl">
+              <div
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-8 w-full max-w-4xl"
+                style={{
+                  opacity: isVisible ? 1 : 0,
+                  transform: isVisible ? "translateY(0)" : "translateY(20px)",
+                  transition: "all 0.6s ease-out 0.6s",
+                }}
+              >
                 <div className="p-6 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 text-center">
                   <i className="fas fa-tshirt text-3xl text-white mb-4"></i>
                   <h3 className="text-xl font-semibold text-white mb-2">
@@ -255,14 +154,20 @@ function MainComponent() {
                   </p>
                 </div>
                 <p className="text-white/75">
-                  Questions? Contact us at info@qclinz.com
+                  Questions? Contact us at hello@qclinz.com
                 </p>
               </div>
             </div>
           </div>
         </div>
 
-        <footer className="mt-20 border-t border-white/10">
+        <footer
+          className="mt-20 border-t border-white/10"
+          style={{
+            opacity: isVisible ? 1 : 0,
+            transition: "opacity 0.6s ease-out 0.9s",
+          }}
+        >
           <div className="container mx-auto px-4 py-8">
             <div className="flex flex-col md:flex-row justify-between items-center gap-6">
               <div className="flex items-center space-x-6">
@@ -320,57 +225,15 @@ function MainComponent() {
       </div>
 
       <div className="fixed inset-0 pointer-events-none">
-        {showPartnerPopup && (
-          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 pointer-events-auto">
-            <div className="bg-white rounded-2xl p-6 w-full max-w-md overflow-y-auto max-h-[90vh]">
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="text-2xl font-semibold text-[#000078]">
-                  Partner with Us
-                </h3>
-                <button
-                  onClick={() => setShowPartnerPopup(false)}
-                  className="text-gray-500 hover:text-gray-700"
-                >
-                  <i className="fas fa-times text-xl"></i>
-                </button>
-              </div>
-              <form onSubmit={handlePartnerSubmit} className="space-y-4"> 
-  <div>
-    <input
-      type="text"
-      name="businessName"
-      value={businessName}
-      onChange={(e) => setBusinessName(e.target.value)}
-      placeholder="Business Name"
-      className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#000078]"
-      required
-    />
-  </div>
-  <div>
-    <input
-      type="email"
-      name="partnerEmail"
-      value={partnerEmail}
-      onChange={(e) => setPartnerEmail(e.target.value)}
-      placeholder="Business Email"
-      className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#000078]"
-      required
-    />
-  </div>
-  <button
-    type="submit"
-    className="w-full py-3 rounded-lg bg-[#000078] text-white font-semibold hover:bg-[#8aa4ca] transition-all"
-  >
-    Submit Application
-  </button>
-</form>
-            </div>
-          </div>
-        )}
-
         {showAboutPopup && (
-          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 pointer-events-auto">
-            <div className="bg-white rounded-2xl p-8 w-full max-w-2xl overflow-y-auto max-h-[90vh]">
+          <div
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 pointer-events-auto"
+            style={{ animation: "fadeIn 0.3s ease-out" }}
+          >
+            <div
+              className="bg-white rounded-2xl p-8 w-full max-w-2xl overflow-y-auto max-h-[90vh]"
+              style={{ animation: "slideIn 0.3s ease-out" }}
+            >
               <div className="sticky top-0 right-0 bg-white pb-4 z-10">
                 <div className="flex justify-between items-center">
                   <h3 className="text-3xl font-semibold text-[#000078] sticky top-0">
@@ -421,8 +284,14 @@ function MainComponent() {
         )}
 
         {showPrivacyPopup && (
-          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 pointer-events-auto">
-            <div className="bg-white rounded-2xl p-8 w-full max-w-2xl overflow-y-auto max-h-[90vh]">
+          <div
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 pointer-events-auto"
+            style={{ animation: "fadeIn 0.3s ease-out" }}
+          >
+            <div
+              className="bg-white rounded-2xl p-8 w-full max-w-2xl overflow-y-auto max-h-[90vh]"
+              style={{ animation: "slideIn 0.3s ease-out" }}
+            >
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-2xl font-semibold text-[#000078]">
                   Privacy Policy
@@ -472,8 +341,14 @@ function MainComponent() {
         )}
 
         {showTermsPopup && (
-          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 pointer-events-auto">
-            <div className="bg-white rounded-2xl p-8 w-full max-w-2xl overflow-y-auto max-h-[90vh]">
+          <div
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 pointer-events-auto"
+            style={{ animation: "fadeIn 0.3s ease-out" }}
+          >
+            <div
+              className="bg-white rounded-2xl p-8 w-full max-w-2xl overflow-y-auto max-h-[90vh]"
+              style={{ animation: "slideIn 0.3s ease-out" }}
+            >
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-2xl font-semibold text-[#000078]">
                   Terms of Service
@@ -521,8 +396,14 @@ function MainComponent() {
         )}
 
         {showContactPopup && (
-          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 pointer-events-auto">
-            <div className="bg-white rounded-2xl p-8 w-full max-w-md overflow-y-auto max-h-[90vh]">
+          <div
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 pointer-events-auto"
+            style={{ animation: "fadeIn 0.3s ease-out" }}
+          >
+            <div
+              className="bg-white rounded-2xl p-8 w-full max-w-md overflow-y-auto max-h-[90vh]"
+              style={{ animation: "slideIn 0.3s ease-out" }}
+            >
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-2xl font-semibold text-[#000078]">
                   Contact Us
@@ -538,22 +419,22 @@ function MainComponent() {
                 <div className="space-y-4">
                   <div className="flex items-center space-x-3">
                     <i className="fas fa-envelope text-[#000078]"></i>
-                    <p>info@qclinz.com</p>
+                    <p>hello@qclinz.com</p>
                   </div>
                   <div className="flex items-center space-x-3">
                     <i className="fas fa-phone text-[#000078]"></i>
-                    <p>coming soon</p>
+                    <p>+1 (555) 123-4567</p>
                   </div>
                   <div className="flex items-center space-x-3">
                     <i className="fas fa-map-marker-alt text-[#000078]"></i>
-                    <p>coming soon</p>
+                    <p>123 Laundry Street, Clean City, ST 12345</p>
                   </div>
                 </div>
                 <div className="border-t pt-6">
                   <p className="text-sm text-gray-600">Business Hours:</p>
-                  <p className="text-sm">coming soon</p>
+                  <p className="text-sm">Monday - Friday: 8:00 AM - 8:00 PM</p>
                   <p className="text-sm">
-                    coming soon 
+                    Saturday - Sunday: 9:00 AM - 6:00 PM
                   </p>
                 </div>
               </div>
@@ -561,7 +442,16 @@ function MainComponent() {
           </div>
         )}
       </div>
-      </div>
+      <style jsx global>{`
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes slideIn {
+          from { transform: translateY(-20px); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
+        }
+      `}</style>
     </div>
   );
 }
