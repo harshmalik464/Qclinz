@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* Prevents horizontal bouncing */
+    overscroll-behavior: none; /* Stops bounce on scroll */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on mobile */
+  }
+  
+  * {
+    box-sizing: border-box; /* Ensures consistent layout sizing */
+  }
+  
