@@ -10,7 +10,7 @@ function MyApp({ Component, pageProps }) {
   return 
     
       <Head>
-        <meta property="og:image" content="public/images/logo.png" />
+        <meta property="og:image" content="/images/logo.png" />
         <meta property="og:image:alt" content="Qclinz logo" />
         <meta property="og:image:type" content="image/png" />
         <meta property="og:image:width" content="1200" />
