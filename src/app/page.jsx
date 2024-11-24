@@ -2,6 +2,24 @@
 import React, { useEffect,useState } from 'react';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import './globals.css';
+import Head from 'next/head';
+
+
+
+function MyApp({ Component, pageProps }) {
+  return 
+    
+      <Head>
+        <meta property="og:image" content="public/images/logo.png" />
+        <meta property="og:image:alt" content="Qclinz logo" />
+        <meta property="og:image:type" content="image/png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+      </Head>
+
+}
+
+
 
 function MainComponent() {
   const [showAboutPopup, setShowAboutPopup] = useState(false);
@@ -111,7 +129,7 @@ function MainComponent() {
                   </h2>
 
                   <p className="text-base sm:text-xl text-white/90 max-w-xl">
-                    Premium pick-up and delivery laundry services. We partner
+                    Premium pick-up and delivery laundry services. Qclinz partner
                     with trusted local laundries to provide high-quality
                     washing, dry cleaning, and ironing, all at your fingertips.
                   </p>
@@ -124,10 +142,10 @@ function MainComponent() {
                     Our Services
                   </h3>
                   <p className="text-white/80 leading-relaxed">
-                    Experience hassle-free laundry with Qclinz. We offer premium
+                    Experience hassle-free laundry with Qclinz. Qclinz offer premium
                     washing, dry cleaning, and ironing services through our
                     network of trusted local partners. Save time and enjoy life
-                    while we handle your laundry needs.
+                    while Qclinz handle your laundry needs.
                   </p>
                 </div>
               </div>
@@ -278,7 +296,7 @@ function MainComponent() {
                 </p>
                 <p className="text-gray-700 leading-relaxed">
                   Through our carefully curated network of trusted local laundry
-                  partners, we ensure that your garments receive the best
+                  partners, Qclinz ensure that your garments receive the best
                   possible care. From everyday washing to specialized dry
                   cleaning and precise ironing, our services are designed to
                   meet all your fabric care needs.
