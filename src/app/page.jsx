@@ -6,18 +6,7 @@ import Head from 'next/head';
 
 
 
-function MyApp({ Component, pageProps }) {
-  return 
-    
-      <Head>
-        <meta property="og:image" content="/images/logo.png" />
-        <meta property="og:image:alt" content="Qclinz logo" />
-        <meta property="og:image:type" content="image/png" />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-      </Head>
 
-}
 
 
 
@@ -61,6 +50,7 @@ function MainComponent() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#000078] via-[#1a237e] to-[#2563eb] font-poppins relative overflow-hidden">
+     <h1 className="visually-hidden">Qclinz - Premium Laundry Services</h1> {/* Add this line */}
       <div className="fixed inset-0 bg-[url('/pattern.svg')] opacity-10"></div>
       {bubbles.map((bubble) => (
         <div
